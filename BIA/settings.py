@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-oeib#qm$e^e!2!4=8&br-0n=)i=(52)2p-p=-985n$6j&cnrae
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
 
 
 # Application definition
@@ -58,7 +59,7 @@ ROOT_URLCONF = 'BIA.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -5,11 +5,11 @@ services:
     build: 
       context: ./
       dockerfile: Dockerfile
-    image: puru21/BIA:0.0.1
-    container_name: BIA-container
+    image: puru21/bia:0.0.2
+    container_name: bia-container
     ports:
       - "8000:8000"
     volumes:
-      - ./ :/backend
+      - .:/backend
 
     command: "python manage.py runserver 0.0.0.0:8000"

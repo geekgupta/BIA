@@ -64,29 +64,25 @@ class BookDetail(APIView):
     
 
 
+from django.http import HttpResponse
+from moviepy.editor import VideoClip, TextClip, CompositeVideoClip
+from moviepy.config import change_settings
+
+change_settings({"IMAGEMAGICK_BINARY": "/usr/bin/convert", "IMAGEMAGICK_POLICY_PATH": "App/policy.xml"})
 class ModifyVideo(APIView):
     permission_classes = [AllowAny]
-    
+
     def post(self, request):
-        # try:
-            serializer = ModifyVideoSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            youtube_link = serializer.validated_data['youtube_link']
-            text_to_add = serializer.validated_data.get('text_to_add', 'Your Name')
-            print(youtube_link , text_to_add )
-            yt = YouTube(youtube_link)
-            video_stream = yt.streams.filter(file_extension='mp4').first()
-            video_path = video_stream.download()
-            text_clip = TextClip(text_to_add, fontsize=30, color='white', bg_color='black')
-            duration = VideoFileClip(video_path).duration
-            text_video = text_clip.set_duration(duration)
-            original_video = VideoFileClip(video_path)
-            final_video = CompositeVideoClip([original_video, text_video])
-            os.makedirs("modified_videos", exist_ok=True)
-            modified_video_path = f"modified_videos/{yt.video_id}_modified.mp4"
-            final_video.write_videofile(modified_video_path, codec='libx264', audio_codec='aac')
 
-            return Response({"message": "Video modified successfully", "modified_video_path": modified_video_path}, status=status.HTTP_200_OK)
-
-        # except Exception as e:
-        #     return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        try:
+            user_name = request.data['user_name']
+            text_clip = TextClip(user_name, fontsize=30, color='white', bg_color='black')
+            video_clip = CompositeVideoClip([text_clip], size=(640, 480), bg_color='black')
+            duration = 10
+            video_clip = video_clip.set_duration(duration)
+            response = HttpResponse(content_type='video/mp4')
+            response['Content-Disposition'] = 'attachment; filename="output_video.mp4"'
+            video_clip.write_videofile(response, codec='libx264', audio_codec='aac', fps=24)
+            return response
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

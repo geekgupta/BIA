@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bia-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bia-backend
+  template:
+    metadata:
+      labels:
+        app: bia-backend
+    spec:
+      containers:
+      - name: bia-con
+        image: puru21/bia:0.0.2
+        command: ["sh" , "-c"]
+        args: ["python manage.py runserver 0.0.0.0:8000"]
+
+        ports:
+        - containerPort: 8000
+
+
+
+--- 
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: bia-backend-service
+spec:
+  selector:
+    app: bia-backend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: LoadBalancer
