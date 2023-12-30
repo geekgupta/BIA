@@ -80,7 +80,7 @@ The project is deployed on [http://34.42.249.190/](http://34.42.249.190/) using 
 
    - Registration: [http://34.42.249.190/account/registration/](http://34.42.249.190/account/registration/)
 
-   - API Endpoints:
+   - API Endpoints ( first generate a token from login API and than use in request header before calling below APIs )  :
      - List all books: [http://34.42.249.190/api/books/](http://34.42.249.190/api/books/)
      - Add new book: [http://34.42.249.190/api/books/](http://34.42.249.190/api/books/)
      - Update book details: [http://34.42.249.190/api/books/<book_id>/](http://34.42.249.190/api/books/<book_id>/)
